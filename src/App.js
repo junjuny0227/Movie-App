@@ -1,18 +1,24 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 
 function App() {
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    axios
-      .get(
+  const [movies, setMovies] = useState([]);
+
+  const getMovies = async () => {
+    const json = await (
+      await fetch(
         "https://yts.mx/api/v2/list_movies.json?minimum_rating=8.5&sort_by=year"
       )
-      .then((response) => {
-        console.log(response);
-        setLoading(false);
-      });
+    ).json();
+    setMovies(json.data.movies);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getMovies();
   }, []);
+
+  console.log(movies);
 
   return (
     <div>
